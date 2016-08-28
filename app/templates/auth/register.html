@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import '_macros.html' as macros %}
+{% block title %}比邻圈 - 用户注册{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>用户注册</h1>
+</div>
+<div class="col-md-4">
+    <form method="POST" class="form" role="form">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.email.label }} {{ form.email(required='', class='form-control') }}
+        </div>
+        {{ macros.render_field_error(form.email) }}
+
+        <div class="form-group">
+        {{ form.username.label }} {{ form.username(required='', class='form-control') }}
+        </div>
+        <div class="form-group">
+        {{ form.password.label }} {{ form.password(required='', class='form-control') }}
+        </div>
+        {{ form.province.label }}
+        <div class="form-group form-inline">
+            {{ form.province(class='form-control') }}
+            {{ form.city(class='form-control') }}
+            {{ form.district(class='form-control') }}
+        </div>
+
+
+            {{ form.submit(class='btn btn-default') }}
+
+    </form>
+
+
+</div>
+
+{% endblock %}

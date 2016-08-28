@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block title %}比邻圈 - 圈子用户{% endblock %}
+
+{% block page_content %}
+    <div class="page-header">
+        <h1>{{ group.name }} 的 {{ user.username }}</h1>
+    </div>
+
+    <div>状态:
+        {% if black and black.expire>now %}
+            <span>已于{{ moment(black.timestamp).fromNow() }}被禁言, 结束日期: {{ moment(black.expire).format('LLL') }}</span>
+            {% if current_user.can(group,Permission.MODERATE_USER) %}
+                <a href="{{ url_for('.disable_user', group_id=group.id,user_id=user.id, disable=0, from_url=request.url) }}">
+                <span class="label label-default">解禁</span>
+                </a>
+            {% endif %}
+        {% else %}
+            <span>正常</span>
+            {% if current_user.can(group,Permission.MODERATE_USER) %}
+                <a href="{{ url_for('.disable_user', group_id=group.id,user_id=user.id, disable=1, from_url=request.url) }}">
+                <span class="label label-danger">禁言</span>
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+
+
+    <div>
+        头衔:<span>{{ user.get_join_group(group).honor }}</span>
+    </div>
+
+    <div>
+        等级:<span>{{ user.get_join_group(group).level }}</span>
+    </div>
+
+    <div>
+        备注:<span>{{ user.get_join_group(group).remarks }}</span>
+    </div>
+{% endblock %}

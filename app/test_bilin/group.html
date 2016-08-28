@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta charset="utf-8">
+    <title>比邻圈 - 钰龙天下</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://libs.baidu.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+
+    
+</head>
+<body>
+
+
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <!-- .navbar-toggle样式用于toggle收缩的内容，即nav-collapse collapse样式所在元素 -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!-- 确保无论是宽屏还是窄屏，navbar-brand都显示 -->
+            <a class="navbar-brand" href="/">比邻圈</a>
+        </div>
+        <!-- 屏幕宽度小于768px时，div.navbar-responsive-collapse容器里的内容都会隐藏，显示icon-bar图标，
+        当点击icon-bar图标时，再展开。屏幕大于768px时，默认显示。 -->
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">首页</a></li>
+                
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                
+                
+                <li><a href="/create-group">创建圈子</a></li>
+                
+                <li><a href="/auth/register">注册</a></li>
+                <li><a href="/auth/login">登陆</a></li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container">
+    
+
+    
+    <div class="page-header">
+        <h1>
+        <img style="width: 50px; height: 50px;" src="/static/group-avatar/default/3_m.png" alt="钰龙天下" class="img-circle">
+        钰龙天下
+        </h1>
+        
+            <p>
+                业主分享交流
+                
+            </p>
+        
+
+        <p>
+        创建于 <span class="flask-moment" data-timestamp="2016-08-14T14:09:39Z" data-format="format('L')" data-refresh="0" style="display: none">2016-08-14T14:09:39Z</span>.
+            
+        </p>
+
+        
+            
+                
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">加入</button>
+                
+            
+            &nbsp;
+        
+        <a href="/group/1/members">
+            成员:&nbsp;<span class="badge">2</span>
+        </a>
+    </div>
+        
+        <div>
+        
+        </div>
+
+
+        
+
+<ul class="posts">
+    
+    
+
+    
+    <li class="post" onclick='location.href="/post/1"'>
+    
+        <div class="post-thumbnail">
+            <a href="/user/%E7%BA%AF%E5%87%80%E7%A9%BA%E6%B0%94">
+                <img class="img-circle profile-thumbnail" src="/static/user-avatar/default/3_m.png">
+            </a>
+        </div>
+        <div class="post-content">
+            <div class="post-header">
+                <a class="post-author" href="/user/%E7%BA%AF%E5%87%80%E7%A9%BA%E6%B0%94">纯净空气</a>
+                <span class="user-level">Lv1</span>
+                <span class="user-remarks">钰龙</span>
+
+                <span class="label label-info user-honor"></span>
+
+                
+            </div>
+
+
+                <div class="post-body">
+
+
+                
+
+                
+                    <p>aaaa</p>
+                
+
+                
+                
+
+    
+
+
+
+<!--poll-show-vote用来在JS中取消冒泡,这样在posts列表中也能进行投票了-->
+<div class="poll poll-show-vote">
+
+    <ul class="list-group">
+        <li class="list-group-item">
+            <div class="poll-info">
+                
+                    
+
+                        <div class="form-group">
+
+                            <input type="checkbox" class="poll-option" id="poll-option-1" value="1">
+                            
+                            <label for="poll-option-1">小明</label>
+                        </div>
+                    
+
+                
+                    
+
+                        <div class="form-group">
+
+                            <input type="checkbox" class="poll-option" id="poll-option-2" value="2">
+                            
+                            <label for="poll-option-2">晓东</label>
+                        </div>
+                    
+
+                
+
+
+                
+                <div>最多可选2项</div>
+                
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="poll-footer">
+            
+            <button class="btn btn-default" onclick='vote(this,"/vote",2)'>投票</button>
+            
+            <span class="poll-votes-count">已3票</span>
+            <span class="poll-expire">结束: <span class="flask-moment" data-timestamp="2016-08-19T14:16:30Z" data-format="format('YYYY-MM-DD HH:mm')" data-refresh="0" style="display: none">2016-08-19T14:16:30Z</span></span>
+            </div>
+        </li>
+    </ul>
+</div>
+
+                
+            </div>
+
+            <div class="post-footer">
+                <span class="post-time"><span class="flask-moment" data-timestamp="2016-08-14T14:16:30Z" data-format="fromNow(0)" data-refresh="0" style="display: none">2016-08-14T14:16:30Z</span></span>
+                <a href="/post/1">
+                    阅读(2)
+                </a>
+
+                <a href="/post/1#comments">
+                    评论(0)
+                </a>
+
+                <a href="/post/1/like?from_url=http%3A%2F%2F127.0.0.1%3A5000%2Fgroup%2F1">
+                    点赞(0)
+                </a>
+
+                
+                
+
+
+            </div>
+        </div>
+    </li>
+    
+    
+</ul>
+
+    
+
+<!--modal-->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title">验证信息</h4>
+			</div>
+			<div class="modal-body">
+				<p>请问你住哪里啊？</p>
+                <input type="text" class="form-control" id="join-remarks" value="">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" onclick="join_group()">加入</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+</div>
+
+
+
+
+    <script src="http://libs.baidu.com/jquery/2.1.4/jquery.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment-with-locales.min.js"></script>
+<script>
+moment.locale("en");
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment').show();
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+<script>
+moment.locale("zh-CN");
+</script>
+
+<script src="/static/script.js"></script>
+
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Converter.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Sanitizer.min.js"></script>
+
+
+<script>
+    function join_group(){
+        var url = "/group/1/join"
+        url += '?remarks='+$('#join-remarks').get(0).value
+        location.href = url
+    }
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+</head>
+<body onload='person3.show();person2.show();'>
+<a  onclick="person3.show()">点这里试试</a>
+<div id='info1'>1</div>
+<div id='info2'>2</div>
+<div id='info3'>3</div>
+
+<script>
+
+/*
+//---------方法一-------------
+function Person(){
+    this.name = "诸葛孔明";
+    
+    this.skill = "空城计";
+    this.honor = "军事";
+    
+    this.show = function(){
+        var info = "找到 "+this.name+","+this.honor+","+this.skill+","+this.age+",";
+        document.getElementById('info').innerText = info;
+    };
+    
+    this.age = 36;
+    
+}
+
+/*
+Person.prototype.show = function(){
+        var info = "找到 "+this.name+","+this.honor+","+this.skill+","+this.age+",";
+        //var info = 'succ';
+        document.getElementById('info').innerText = info;
+    }
+    */
+    
+/*
+var person = new Person();
+alert(person.honor);
+*/
+//========================
+
+
+//---------方法2-------------
+var person2 = {
+
+    school:'HeroSchool',
+    name : 'Tom',
+    honor : 'SuperMan',
+
+    show : function(){
+        var info = "找到美国队长："+this.name + " is "+ this.honor + ','+this.school+','+this.age+this.getColor(",big ");
+        document.getElementById('info2').innerText = info;
+        //alert(info);
+    },
+    age:26,
+    getColor:function(big){
+        return big+'Blue';
+    }
+
+};
+
+
+//---------方法3-------------
+var person3 = (function(){
+    var my = {};
+      
+    my.school='HeroSchool';
+    my.name = 'Tom';
+    my.honor = 'SuperMan';
+
+    my.show = function(){
+        var info = "找到美国队长："+my.name + " is "+ my.honor + ','+my.school+','+my.age+getColor(",big ");
+        document.getElementById('info3').innerText = info;
+        //alert(info);
+    };
+    my.age=26;
+
+    function getColor(big){
+        return big+'Blue';
+    }
+    return my;
+}());
+
+//person.show();
+
+</script>
+</body>
+</html>

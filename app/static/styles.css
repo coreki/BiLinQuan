@@ -1,0 +1,431 @@
+
+span.field-error {
+    color: red;
+}
+
+div.page-right{
+    padding-left: 50px;
+}
+
+div.user-profile-header{
+    margin-left: 100px;
+}
+
+/*头像*/
+
+div.avatar-thumbnail {
+    position: absolute;
+}
+
+
+img.user-avatar-large{
+    width:80px;
+    height: 80px;
+}
+
+img.user-avatar-medium {
+    width:40px;
+    height: 40px;
+}
+
+img.user-avatar-small{
+    width:25px;
+    height: 25px;
+}
+
+.profile-header {
+    min-height: 260px;
+    margin-left: 280px;
+}
+
+
+img.group-avatar-large {
+    width: 80px;
+    height: 80px;
+}
+
+img.group-avatar-medium {
+    width: 60px;
+    height: 60px;
+}
+
+img.group-avatar-small {
+    width: 45px;
+    height: 45px;
+}
+
+
+/*圈子列表*/
+ul.groups {
+    list-style-type: none;
+    padding: 0px;
+    margin: 5px 0px 0px 0px;
+}
+ul.groups li.group {
+    padding:5px;
+    margin: 10px 10px 10px 10px;
+
+}
+
+
+span.group-name {
+    font-size: 12px;
+    text-align: center;
+}
+
+/*进入圈子详情*/
+
+div.group-info {
+    padding: 20px 2px;
+}
+
+
+.group-info .group-content {
+    margin-left:90px;
+}
+
+.group-info .group-content .group-name {
+    font-size: 26px;
+}
+.group-info .group-content a{
+    color: #666;
+}
+
+/*新发布博文*/
+
+textarea.new-post-input {
+    border: 0px;
+    height: 70px;
+}
+
+div#new-post-images-preview{
+    float: left;
+}
+
+
+
+div#new-post-images-preview .image-preview{
+    float: left;
+
+    width: 50px;
+    height: 50px;
+    margin-right:5px;
+    border: 1px solid #eee;
+    background-size:cover;
+}
+
+div#new-post-images-file {
+    /*坐标飞出可见范围,达到不可见效果*/
+    position: absolute;
+    left: -200px;
+
+
+}
+div#new-post-images-file input{
+    /*file input 千万不能设为隐藏,否则IE下面无法获取到真实路径*/
+    /*display: none;*/
+    /*最小,实现不可见效果*/
+    width: 3px;
+    height: 1px;
+}
+
+div#new-post-add-image-btn{
+    float: left;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #eee;
+    color: #888;
+    font-size: 26px;
+    text-align: center;
+    line-height:45px;
+    cursor: pointer;
+
+}
+div#new-post-add-image-btn:hover{
+    color: #666;
+    background-color: #eee;
+}
+input.poll-options-input{
+    width: 350px;
+    margin: 10px 0px;
+    max-width:100%
+}
+
+div#new-post-poll-expand span{
+    margin-left: 25px;
+}
+div#new-post-poll-expand span input{
+    width:25px;
+    border:0px;
+    text-align: center;
+}
+
+
+/*显示博文的tab*/
+div.post-tabs {
+    margin-top: 16px;
+}
+
+/*博文列表*/
+ul.posts {
+    list-style-type: none;
+    padding: 0px;
+    margin: 16px 0px 0px 0px;
+    border-top: 1px solid #e0e0e0;
+}
+
+div.post-tabs ul.posts {
+    margin: 0px;
+    border-top: none;
+}
+ul.posts li.post {
+    padding: 8px 2px;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer
+}
+ul.posts li.post:hover {
+    background-color: #fbfbfb;
+}
+
+/*博文详情页面*/
+.detail ul.posts {
+    border-top: none;
+}
+.detail ul.posts li.post {
+    cursor: auto;
+}
+.detail ul.posts li.post:hover {
+    background-color: #fff;
+}
+
+
+div.post-content {
+    margin-left: 48px;
+    min-height: 48px;
+}
+
+div.post-header{
+    font-size: 14px;
+    color: #AAA;
+}
+
+div.post-author {
+    font-weight: bold;
+}
+
+div.post-body {
+    color: #333;
+    padding: 10px 0px;
+}
+
+div.post-footer {
+    color: #888;
+    font-size: 13px;
+    margin-top: 10px;
+}
+.post-footer a{
+    color: #888;
+    margin-right: 20px;
+}
+.post-footer span{
+    color: #888;
+    margin-right: 10px;
+}
+.post-footer a:hover{
+    color: cornflowerblue;
+}
+
+
+div.post-images-list{
+
+}
+
+div.post-image{
+    cursor: pointer;
+    float:left;
+    height: 80px;
+    width: 80px;
+    margin: 4px 8px 4px 0px;
+    border: 1px solid #eee;
+    background-size:cover;
+    background-repeat:no-repeat;
+    background-position: center;
+}
+
+
+
+div.post-poll-show-vote {
+    cursor: auto;
+}
+
+div.post-poll-info {
+    padding: 10px 5px;
+}
+
+
+span.post-poll-votes-count {
+    margin-left:8px;
+}
+span.post-poll-expire {
+    margin-left:10px;
+}
+
+span.user-level {
+    font-size: 12px;
+    color: #AAA;
+    display: none;
+}
+
+span.user-remarks {
+    font-size: 12px;
+    color: #AAA;
+}
+
+span.user-honor {
+    font-size: 10px;
+    color: #fff;
+    padding: 0px 3px;
+}
+
+/*发布新评论*/
+
+.new-comment-control-area {
+    padding: 10px 2px;
+}
+.new-comment-control{
+    margin-left: 45px;
+}
+
+/*评论列表*/
+ul.comments {
+    list-style-type: none;
+    padding: 0px;
+    margin: 16px 0px 0px 0px;
+}
+ul.comments li.comment {
+    margin-left: 0px;
+    padding: 12px 2px;
+    border-bottom: 1px solid #e0e0e0;
+}
+ul.comments li.comment:nth-child(1) {
+    border-top: 1px solid #e0e0e0;
+}
+
+div.comment-header {
+    font-size: 13px;
+    color: #AAA;
+}
+
+div.comment-author {
+    font-weight: bold;
+}
+
+div.comment-content {
+    margin-left: 48px;
+    min-height: 48px;
+}
+
+div.comment-footer {
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+.comment-time,
+.comment-like,
+.comment-reply {
+    margin-right: 20px;
+    color: #AAA;
+}
+
+.comment-footer a:hover{
+    color: cornflowerblue;
+}
+
+
+/*回复新内容*/
+div.new-reply-control-area {
+    padding:8px 0px;
+    display: none;
+}
+
+div.new-reply-control {
+    margin-left: 30px;
+}
+
+/*回复列表*/
+ul.replys {
+    list-style-type: none;
+    padding: 0px;
+    margin: 8px 0px 0px 0px;
+}
+ul.replys li.reply {
+    padding:8px 0px;
+}
+
+
+div.reply-content {
+    margin-left: 30px;
+    min-height: 28px;
+}
+div.reply-header{
+    color: #AAA;
+    font-size: 12px;
+}
+span.reply-body {
+    color: #000;
+    font-size: 13px;
+}
+a.reply-author {
+    margin-right: 5px;
+    font-size: 13px;
+}
+
+div.reply-footer {
+    font-size: 12px;
+    margin: 3px 0px 0px 0px;
+}
+
+/*时间 赞  回复*/
+.reply-time,
+.reply-like,
+.reply-reply {
+    margin-right: 20px;
+    color: #AAA;
+}
+
+
+div.pagination {
+    width: 100%;
+    text-align: right;
+    padding: 0px;
+    margin: 0px;
+}
+div.flask-pagedown-preview {
+    margin: 10px 0px 10px 0px;
+    border: 1px solid #e0e0e0;
+    padding: 4px;
+}
+div.flask-pagedown-preview h1 {
+    font-size: 140%;
+}
+div.flask-pagedown-preview h2 {
+    font-size: 130%;
+}
+div.flask-pagedown-preview h3 {
+    font-size: 120%;
+}
+
+/*博文内容的h标签放大*/
+.post-body h1 {
+    font-size: 140%;
+}
+.post-body h2 {
+    font-size: 130%;
+}
+.post-body h3 {
+    font-size: 120%;
+}
+.table.followers tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+

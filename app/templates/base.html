@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% block head %}
+    <meta charset="utf-8">
+    <title>{% block title %}比邻圈{% endblock %}</title>
+    <!--小屏幕使用折叠效果-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--优先使用最新浏览器内核渲染-->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+
+    <!--css文要和网站同域名才兼容IE8,放在本地最好-->
+    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap/css/bootstrap.min.css') }}">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- 这些IE8兼容文件要和网站同域名才有效,放在本地最好 -->
+    <!--[if lt IE 9]>
+      <script src="{{ url_for('static',filename='bootstrap/js/html5shiv.min.js') }}"></script>
+      <script src="{{ url_for('static',filename='bootstrap/js/respond.min.js') }}"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+
+    <!--为了兼容IE8以及以下,请使用JQUERY1.9.0以及BOOTSTRAP3.2.0,之后的版本兼容性都逐步下降,
+    JQ2.0完全不支持IE8,BOOTSTRAP3.3以后很多细节不兼容IE8-->
+
+    <script src="{{ url_for('static',filename='bootstrap/jquery.js') }}"></script>
+    <script src="{{ url_for('static',filename='bootstrap/js/bootstrap.min.js') }}"></script>
+
+    <!--
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    -->
+
+    {% endblock %}
+</head>
+<body>
+
+
+{% block navbar %}
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <!-- .navbar-toggle样式用于toggle收缩的内容，即nav-collapse collapse样式所在元素 -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!-- 确保无论是宽屏还是窄屏，navbar-brand都显示 -->
+            <a class="navbar-brand" href="{{ url_for('home.index') }}">比邻圈</a>
+        </div>
+        <!-- 屏幕宽度小于768px时，div.navbar-responsive-collapse容器里的内容都会隐藏，显示icon-bar图标，
+        当点击icon-bar图标时，再展开。屏幕大于768px时，默认显示。 -->
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('home.index') }}">首页</a></li>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('home.user', username=current_user.username) }}">我的资料</a></li>
+                {% endif %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_administrator()%}
+                <li><a href="{{ url_for('home.manage_user') }}">管理用户</a></li>
+                {% endif %}
+                {% if current_user.user_permission(Permission.MODERATE_POST) %}
+                <li><a href="{{ url_for('home.moderate') }}">管理评论</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('home.create_group') }}">创建圈子</a></li>
+                {% if current_user.is_authenticated %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        {{ current_user.username }} <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('home.change_password') }}">修改密码</a></li>
+                        <li><a href="{{ url_for('auth.logout') }}">退出</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li><a href="{{ url_for('auth.register') }}">注册</a></li>
+                <li><a href="{{ url_for('auth.login') }}">登陆</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+
+
+<script src="{{ url_for('static',filename='moment/moment-with-locales.min.js') }}"></script>
+<script>
+moment.locale("zh-CN");
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment').show();
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+
+
+<script src="{{ url_for('static',filename='script.js')}}"></script>
+{% endblock %}
+<br>
+<br>
+</body>
+</html>

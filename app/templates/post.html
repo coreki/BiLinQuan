@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% import '_macros.html' as macros %}
+
+
+{% block title %}比邻圈 - 详细内容{% endblock %}
+
+{% block page_content %}
+    <div class="detail">
+    {% set is_full_post=True %}
+    {% include '_posts.html' %}
+    </div>
+
+
+    <br><br>
+
+    {% if current_user.can(group,Permission.COMMENT) %}
+    <div class="new-comment-control-area">
+        <div class="avatar-thumbnail ">
+            <img class="img-circle user-avatar-medium" src="{{ url_for('static',filename=current_user.medium_avatar) }}" alt="{{ current_user.username }}" >
+        </div>
+        <div class="new-comment-control">
+            <form method="POST" role="form" action="{{ url_for('.new_comment',post_id=posts[0].id) }}">
+                {{ form.hidden_tag() }}
+                 <div class="input-group">
+
+                    {{ form.body(class='form-control',placeholder="评论一下吧",required='') }}
+
+                    <span class="input-group-btn">
+                    <input class='btn btn-default' type="submit" value="评论">
+                    </span>
+                 </div>
+                 {{ macros.render_field_error(form.body) }}
+
+
+            </form>
+
+        </div>
+     </div>
+    {% endif %}
+
+
+    <br>
+    {% if posts[0].comments_count>0 %}
+        <h5 id='comments'>评论({{ posts[0].comments_count }})</h5>
+        {% include '_comments.html' %}
+
+        {% if pagination and pagination.pages>1 %}
+        <div class="pagination">
+            {{ macros.pagination_widget(pagination, '.post',fragment='#comments',id=posts[0].id) }}
+        </div>
+        {% endif %}
+    {% endif %}
+
+
+{% endblock %}

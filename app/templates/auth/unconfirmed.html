@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}比邻圈 - 未激活{% endblock %}
+
+{% block page_content %}
+<h1> 你好,{{ current_user.username }} 您的账号还未激活</h1>
+    <br><a href="{{ url_for('auth.resend_confirmation') }}">没有收到?点击这里再次发送激活链接至您的邮箱</a>
+
+{% endblock %}
+
+

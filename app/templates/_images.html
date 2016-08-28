@@ -1,0 +1,76 @@
+<div class="post-images-list">
+{% for image in post.images %}
+
+    <div class="post-image post-image-fill-width"
+            style="background-image: url( {{ url_for('static',filename=image.small) }});
+                filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(
+            src='{{ url_for('static',filename=image.small) }}',
+            sizingMethod='scale');"
+             onclick='popImage("{{ url_for('static',filename=image.extra_large) }}",{{ image.width }},{{ image.height }});'>
+    </div>
+
+{% endfor %}
+
+    <!--post-image的div设置了float:left后,末尾需要增加一个clear:both的div,就可以把父div撑开,否则父div会是一根线-->
+    <div style="clear:both"></div>
+</div>
+
+
+
+
+
+<script>
+    //显示大图
+    function popImage(imgUrl,width,height) {
+
+        //获取视窗尺寸
+        var windowWidth = $(window).width();
+        var windowHeight =  $(window).height()
+
+        //计算最大尺寸
+        //PC上 modal固定宽度是600,如果视窗大于565,则565为标准
+        //如果视窗小于565,则以视窗为标准,比如手机的视窗就是300左右
+        var maxWidth = windowWidth*0.8>565?565:windowWidth*0.8;
+        var maxHeight = windowHeight *0.8;//允许80%左右
+
+        //一定要先清空高宽属性,否则待会获取img src的尺寸的时候会是旧尺寸
+        //$('#big-image').css('width', '');
+        //$('#big-image').css('height', '');
+
+        $("#imageModal").modal("toggle");
+        $("#big-image").get(0).src = imgUrl;
+
+
+        //送数据库传入图片尺寸最准确,因为手机上有时候获取尺寸为0
+        //获取图片尺寸
+        //var width = $("#big-image").width()
+        //var height = $("#big-image").height()
+
+        //alert("first:"+width+","+height);
+
+        //如果宽度超出,则等比缩减尺寸
+        if(width>maxWidth){
+            height = height*(maxWidth/width)
+            width = maxWidth;
+        }
+
+        //如果高度超出,则等比缩减尺寸
+        if(height>maxHeight){
+            width = width*(maxHeight/height)
+            height = maxHeight;
+        }
+        //alert("second:"+width+","+height);
+
+        //只要设置宽度就好,高度会自动缩放
+        $("#big-image").css('width',width);
+        //$("#big-image").css('height',height);
+
+
+
+        //alert(this.className);
+       //取消冒泡,这样就不回激活父DIV事件
+        var e=event;
+        e.cancelBubble=true;
+    }
+
+</script>

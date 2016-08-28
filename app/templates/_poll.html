@@ -1,0 +1,71 @@
+
+{% if current_user.is_authenticated and post.poll.has_voted_poll(current_user) %}
+    {% set has_voted=True %}
+{% else %}
+    {% set has_voted=False %}
+{% endif %}
+
+{% if has_voted %}
+<div class="post-poll">
+{% else %}
+<!--poll-show-vote用来在JS中取消冒泡,这样在posts列表中也能进行投票了-->
+<div class="post-poll post-poll-show-vote">
+{% endif %}
+
+    <ul class="list-group">
+        <li class="list-group-item">
+            <div class="post-poll-info">
+                {% for option in post.poll.options %}
+                    {% if has_voted %}
+                        <div class="media">
+                            <div class="pull-left">
+                                {% if option.image %}
+                                <img style="width: 40px" class="img-rounded" src="{{ url_for('static',filename='default/0_m.png') }}">
+                                {% endif %}
+                            </div>
+                            {% if post.poll.votes_count==0 %}
+                                {% set option_votes_per=1 %}
+                            {% else %}
+                                {% set option_votes_per=(option.votes_count/post.poll.votes_count*100)|round(1) %}
+                            {% endif %}
+                            <div class="media-body">
+                                <b>{{ option.text }} </b><span> {{ option.votes_count }}票</span>
+                                <div class="progress" style="margin-bottom: 5px">
+                                    <div class="progress-bar progress-bar-success" style="width:{{ option_votes_per }}%">
+                                        <span>{{ option_votes_per }}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+
+                        <div class="form-group">
+
+                            <input type="checkbox" class="poll-option" id="poll-option-{{ option.id }}" value="{{ option.id }}">
+                            {% if option.image %}
+                            <img style="width: 30px" class="img-rounded" src="{{ url_for('static',filename='default/0_m.png') }}">
+                            {% endif %}
+                            <label for="poll-option-{{ option.id }}">{{ option.text }}</label>
+                        </div>
+                    {% endif %}
+
+                {% endfor %}
+
+
+                {% if not has_voted %}
+                <div>最多可选{{ post.poll.max_choice }}项</div>
+                {% endif %}
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="post-poll-footer">
+            {% if not has_voted %}
+            <button class="btn btn-default"  onclick='vote(this,"{{ url_for('.vote') }}",{{ post.poll.max_choice }})'>投票</button>
+            {% endif %}
+            <span class="post-poll-votes-count">已{{ post.poll.votes_count }}票</span>
+            <span class="post-poll-expire">结束: {{ moment(post.poll.expire).format('MM-DD HH:mm') }}</span>
+            </div>
+        </li>
+    </ul>
+</div>
+

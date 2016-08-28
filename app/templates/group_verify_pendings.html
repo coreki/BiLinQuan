@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}比邻圈 - 加入{{ group.name }}申请加入{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>{{ group.name }} 申请加入</h1>
+</div>
+
+<!--小屏幕才显示-->
+<ul class="media-list visible-xs-block">
+    {% for verify_info in verifies_info %}
+    <li class="media" style="padding: 10px 0px; margin: 0px 0px; border-bottom:1px #EEE solid">
+        <a class="pull-left" href="{{ url_for('.user', username = verify_info.user.username) }}">
+            <img style="width: 40px; height: 40px;"  class="img-circle" src="{{ url_for('static',filename=verify_info.user.medium_avatar) }}">
+        </a>
+
+        <div class="pull-right">
+            {% if verify_info.status == 1 %}
+            已允许
+            {% elif verify_info.status == -1 %}
+            已拒绝
+            {% else %}
+            <a class="btn btn-primary btn-sm" href="{{ url_for('.verify_pending_allow',id=verify_info.verify_pending_id,allow=1) }}">
+                允许
+            </a>
+            <a class="btn btn-default btn-sm" href="{{ url_for('.verify_pending_allow',id=verify_info.verify_pending_id,allow=0) }}">
+                拒绝
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="meida-body">
+            <a href="{{ url_for('.user', username = verify_info.user.username) }}">
+            {{ verify_info.user.username }}
+            </a>
+
+            &nbsp;&nbsp;<span style="color: #AAA;">{{ moment(verify_info.timestamp).fromNow() }}</span>
+
+
+            <div>
+                <span style="color: #AAA"> 验证:</span>
+                {{ verify_info.verify_answer }}
+            </div>
+
+        </div>
+
+
+    </li>
+    {% endfor %}
+</ul>
+
+<!--小屏幕隐藏-->
+<table class="table table-hover followers hidden-xs">
+    <thead><tr><th>成员</th><th>验证信息</th><th>申请时间</th><th>操作</th></tr></thead>
+    {% for verify_info in verifies_info %}
+
+    <tr>
+        <td style="line-height: 50px">
+
+            <a href="{{ url_for('.user', username = verify_info.user.username) }}">
+                <img style="width: 40px; height: 40px;"  class="img-circle" src="{{ url_for('static',filename=verify_info.user.medium_avatar) }}">
+                {{ verify_info.user.username }}
+            </a>
+
+        </td>
+        <td style="line-height: 50px">{{ verify_info.verify_answer }}
+
+        </td>
+        <td style="line-height: 50px; color: #AAA;">
+            {{ moment(verify_info.timestamp).fromNow() }}
+        </td>
+        <td style="line-height: 50px">
+            {% if verify_info.status == 1 %}
+            已允许
+            {% elif verify_info.status == -1 %}
+            已拒绝
+            {% else %}
+            <a class="btn btn-primary btn-sm" href="{{ url_for('.verify_pending_allow',id=verify_info.verify_pending_id,allow=1) }}">
+                允许
+            </a>
+            <a class="btn btn-default btn-sm" href="{{ url_for('.verify_pending_allow',id=verify_info.verify_pending_id,allow=0) }}">
+                拒绝
+            </a>
+            {% endif %}
+
+        </td>
+
+
+    </tr>
+    {% endfor %}
+</table>
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, endpoint, id = group.id) }}
+</div>
+{% endblock %}

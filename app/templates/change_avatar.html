@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}比邻圈 - 更换头像{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>更换你的头像</h1>
+</div>
+<div class="col-md-4">
+
+    <form action="" method=post enctype=multipart/form-data>
+        <input id="image_file" type="file" name="image_file" style="width: 3px; height: 1px">
+        <div class="input-append">
+            <input id="photoCover" class="input-large" type="text" style="height:30px;">
+            <a class="btn" onclick="$('input[id=image_file]').click();">选择图片</a>
+        </div>
+        <input type=submit class="btn btn-default" value="上传">
+    </form>
+    <br><br>
+    <div id="preview" style="width:200px;height:200px;border: 1px solid #ccc;background-size:cover;"></div>
+
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+{{ super() }}
+<script>
+    //文件上传后
+    $("input[id=image_file]").on('change', function () {
+        $("input[id=photoCover]").val($(this).val());
+
+        preview(this);
+    });
+
+    //预览功能
+    function preview(file) {
+        var prevDiv = document.getElementById('preview');
+
+        //webkit
+        if (file.files && file.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+                $(prevDiv).css('background-image', 'url(' + evt.target.result, + ')');
+            };
+            reader.readAsDataURL(file.files[0]);
+            // Firefox
+            if(!reader)
+        	    $(prevDiv).css('background-image', 'url(' + file.files[0].getAsDataURL(), + ')');
+        }
+    else//IE6-10
+    {
+    	//input的select()和document.selection.createRange().text非常关键，确保imgSrc获取到真实路径
+		file.select();
+		var imgSrc = document.selection.createRange().text;
+		//alert(imgSrc);
+
+        prevDiv.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod = scale)";
+        prevDiv.filters("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
+
+     }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,71 @@
+
+
+<html>
+<head>
+<meta charset="utf-8">
+<title>Chrome,Safari,Firefox3,IE6,IE7,IE8上传图片预览</title>
+</head>
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<h2>Chrome,Safari,Firefox3,IE6,IE7,IE8上传图片预览</h2>
+<!--用来上传文件,注意，input不能display：none，否则ie因为安全原因会获取到空路径-->
+<input id="upload_img" type="file">
+<br><br>
+<!--用来作为预览图片的载体-->
+<div id='preview' style="width:200px;height:200px;border: 1px solid #666;background-size:cover;"></div>
+<br><br>
+<button type="button" onclick="closePreview()">关闭预览</button>
+
+
+<script type="text/javascript">
+$('#upload_img').on('change',function(){
+    //alert(this.value);
+    preview(this);
+});
+
+
+function preview(file){
+
+    var preview_image = $("#preview");
+    //webkit
+    if (file.files && file.files[0]) {
+
+        //chrome,safari
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+            //alert(evt.target.result);
+            preview_image.css('background-image', 'url(' + evt.target.result, + ')');
+            
+        };
+        reader.readAsDataURL(file.files[0]);    
+
+        // Firefox 因安全性问题已无法直接通过 input[file].value 获取完整的文件路径
+        if(!reader)
+            preview_image.css('background-image', 'url(' + file.files[0].getAsDataURL(), + ')');
+    }
+    else//IE6-10
+    {
+        //input的select()和document.selection.createRange().text非常关键，确保imgSrc获取到真实路径
+        file.select();
+        var imgSrc = document.selection.createRange().text;
+        alert(imgSrc);
+
+        var imgDiv = document.getElementById("preview");
+        imgDiv.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod = scale)";
+        imgDiv.filters("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
+
+     }
+}
+
+//关闭预览
+function closePreview(){
+    //webkit
+    var preview_image = $("#preview");
+    preview_image.css("background-image", "none");
+    //ie
+    var imgDiv = document.getElementById("preview");
+    imgDiv.style.filter = "none";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+
+
+<ul class="posts">
+    {% for post in posts %}
+    {% if current_user.can_view(post) %}
+
+    {% if not is_full_post %}
+    <li class="post" onclick='location.href="{{ url_for('.post',id=post.id) }}"'>
+    {% else %}
+    <li class="post">
+    {% endif %}
+        <div class="avatar-thumbnail">
+            <a href="{{ url_for('.user', username=post.author.username) }}">
+                <img class="img-circle user-avatar-medium" src="{{ url_for('static',filename=post.author.medium_avatar) }}" alt="{{ post.author.username }}" >
+            </a>
+        </div>
+        <div class="post-content">
+            <div class="post-header">
+                <a class="post-author" href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a>
+                <span class="user-level">Lv{{ post.author.level }}</span>
+
+                {% if post.author.can(post.group,Permission.MODERATE_POST) %}
+                <span class="label label-info user-honor">管理员</span>
+                {% else %}
+                <span class="label label-info user-honor">{{ post.author.get_join_group(post.group).honor }}</span>
+                {% endif %}
+                <span class="user-remarks">{{ post.author.get_join_group(post.group).show_remarks }}</span>
+
+                {% if current_user.can(post.group,Permission.MODERATE_USER) %}
+                <a href="{{ url_for('.group_member_info', group_id=post.group.id,user_id=post.author.id) }}">
+                管理
+                </a>
+                {% endif %}
+            </div>
+
+
+            <div class="post-body">
+
+
+                {% if post.disabled==True %}
+                <p><i>该条博文已经被删除</i></p>
+                {% endif %}
+
+                {% if post.body_html %}
+                    {{ post.body_html | safe }}
+                {% else %}
+                    {{ post.body }}
+                {% endif %}
+
+
+                {% if post.poll %}
+                {% include '_poll.html' %}
+                {% endif %}
+
+                {% if post.images.count()>0 %}
+                {% include '_images.html' %}
+                {% endif %}
+            </div>
+
+            <div class="post-footer">
+                <span class="post-time">{{ moment(post.timestamp).fromNow() }}</span>
+                <a href="{{ url_for('.post',id=post.id) }}">
+                    阅读({{ post.reads_count }})
+                </a>
+
+                <a href="{{ url_for('.post',id=post.id) }}#comments">
+                    评论({{ post.comments_count }})
+                </a>
+
+                <a href="{{ url_for('.like_p',id=post.id, from_url=request.url) }}">
+                    点赞({{ post.likes_count }})
+                </a>
+
+                {% if current_user == post.author %}
+                <a href="{{ url_for('.edit_post',id=post.id) }}">
+                    编辑
+                </a>
+                {% elif current_user.is_administrator() %}
+                <a href="{{ url_for('.edit_post',id=post.id) }}">
+                    编辑 [Admin]
+                </a>
+                {% endif %}
+                {% if current_user.can(post.group,Permission.MODERATE_POST) %}
+                    {% if post.disabled==True %}
+                    <a href="{{ url_for('.disable_post', id=post.id, disable=0, from_url=request.url) }}">
+                        解除屏蔽
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('.disable_post', id=post.id, disable=1, from_url=request.url) }}">
+                        屏蔽
+                    </a>
+                    {% endif %}
+                {% endif %}
+
+
+            </div>
+        </div>
+    </li>
+    {% endif %}
+    {% endfor %}
+</ul>
+
+
+<!--modal-->
+<div class="modal" id="imageModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" onclick="closeImageModal()">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span></button>
+				<h4 class="modal-title">大图</h4>
+			</div>
+			<div class="modal-body" style="text-align: center">
+                <img id="big-image" src="{{ url_for('static',filename='other/img-blank.png') }}" >
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal"  onclick="closeImageModal()">关闭</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<script>
+    //取消指定子DIV冒泡,这样子DIV就不会响应父DIV的Click事件了
+    window.onload=function(){
+        $('.post-poll-show-vote').each(function(){
+           this.onclick = function(ev){
+                var e=ev||event;
+                //alert(this.className);
+               //取消冒泡
+                e.cancelBubble=true;
+            }
+        });
+    };
+
+    function closeImageModal(){
+        //加载loading图,方便待会加载下一张图片的时候体验好
+        $('#big-image').get(0).src="{{ url_for('static',filename='other/img-blank.png') }}";
+    }
+/*
+    //图片加载完后重置大小为100%,适应图片尺寸
+    document.getElementById("big-image").onload = function () {
+        //alert("图片加载已完成");
+        this.style.width = "100px";
+        this.style.height = "100px";
+    };
+    */
+
+
+</script>

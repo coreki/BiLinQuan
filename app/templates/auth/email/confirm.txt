@@ -1,0 +1,5 @@
+
+欢迎注册比邻,请使用以下链接激活您的帐号:
+
+{{ url_for('auth.confirm', token=token, _external=True) }}
+

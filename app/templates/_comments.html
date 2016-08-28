@@ -1,0 +1,127 @@
+<ul class="comments">
+
+
+    {% for comment in comments %}
+    <li class="comment">
+        <div class="avatar-thumbnail">
+            <a href="{{ url_for('.user', username=comment.author.username) }}">
+                <img class="img-circle user-avatar-medium" src="{{ url_for('static',filename=comment.author.medium_avatar) }}" alt="{{ comment.author.username }}" >
+            </a>
+        </div>
+        <div class="comment-content">
+            <div class="comment-header">
+                <a  class="comment-author" href="{{ url_for('.user', username=comment.author.username) }}">{{ comment.author.username }}</a>
+                <span class="user-level">Lv{{ comment.author.level }}</span>
+
+                {% if comment.author.can(comment.post.group,Permission.MODERATE_POST) %}
+                <span class="label label-info user-honor">管理员</span>
+                {% else %}
+                <span class="label label-info user-honor">{{ comment.author.get_join_group(comment.post.group).honor }}</span>
+                {% endif %}
+                <span class="user-remarks">{{ comment.author.get_join_group(comment.post.group).show_remarks}}</span>
+
+                {% if current_user.can(comment.post.group,Permission.MODERATE_USER) %}
+                <a href="{{ url_for('.group_member_info', group_id=comment.post.group.id,user_id=comment.author.id) }}">
+                管理
+                </a>
+                {% endif %}
+            </div>
+
+            <div class="comment-body">
+                {% if comment.disabled %}
+                <p><i>该评论已经被删除</i></p>
+                {% endif %}
+                {% if current_user.can(group,Permission.MODERATE_POST) or not comment.disabled %}
+                    {% if comment.body_html %}
+                        {{ comment.body_html | safe }}
+                    {% else %}
+                        {{ comment.body }}
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="comment-footer">
+                <span class="comment-time">{{ moment(comment.timestamp).fromNow() }}</span>
+                <a class="comment-like" href="{{ url_for('.like_m',id=comment.id, from_url=request.url) }}">
+                点赞({{ comment.likes_count }})
+                </a>
+                <a class="comment-reply" style="cursor: pointer;" onclick="show_reply_area(this,{{ comment.id }})">
+                回复
+                </a>
+            </div>
+
+
+
+            <!-- reply -->
+            <ul class="replys">
+                {% for reply in comment.children %}
+                <li class="reply">
+                    <div class="avatar-thumbnail">
+                        <a href="{{ url_for('.user', username=reply.author.username) }}">
+                            <img class="img-circle user-avatar-small" src="{{ url_for('static',filename=reply.author.small_avatar) }}" alt="{{ reply.author.username }}" >
+                        </a>
+                    </div>
+                    <div class="reply-content">
+                        <div class="reply-header">
+                            <a class="reply-author" href="{{ url_for('.user', username=reply.author.username) }}">{{ reply.author.username }}</a>
+                            <span class="user-level">Lv{{ reply.author.level }}</span>
+
+
+                            {% if reply.author.can(comment.post.group,Permission.MODERATE_POST) %}
+                            <span class="label label-info user-honor">管理员</span>
+                            {% else %}
+                            <span class="label label-info user-honor">{{ reply.author.get_join_group(comment.post.group).honor }}</span>
+                            {% endif %}
+                            <span class="user-remarks">{{ reply.author.get_join_group(comment.post.group).show_remarks }}</span>
+
+                            {% if current_user.can(comment.post.group,Permission.MODERATE_USER) %}
+                            <a href="{{ url_for('.group_member_info', group_id=comment.post.group.id,user_id=reply.author.id) }}">
+                            管理
+                            </a>
+                            {% endif %}
+                        </div>
+                        <span class="reply-body">{{ reply.body }}</span>
+                        <div class="reply-footer">
+                        <span class="reply-time">{{ moment(comment.timestamp).fromNow() }}</span>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            <!-- end -->
+
+
+            <!--回复输入框-->
+            <div class="new-reply-control-area">
+
+                <div class="avatar-thumbnail">
+                    <img class="img-circle user-avatar-small" src="{{ url_for('static',filename=current_user.small_avatar) }}" alt="{{ current_user.username }}" >
+
+                </div>
+
+                <div class="new-reply-control">
+                    <form method="POST" role="form" action="{{ url_for('.new_reply',post_id=comment.post.id,comment_id=comment.id) }}">
+                        {{ form.pid(value=comment.id) }}
+
+                         <div class="input-group  input-group-sm">
+                            {{ form.body(class='form-control',placeholder="有什么想说的吗?") }}
+                            <span class="input-group-btn">
+                            <input class='btn btn-default' type="submit" value="回复">
+                            </span>
+                         </div>
+
+                    </form>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+    </li>
+    {% endfor %}
+
+</ul>
+

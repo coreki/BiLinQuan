@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}比邻圈 - {{ group.name }}{% endblock %}
+
+
+{% block page_content %}
+
+    <div class="group-info">
+
+        <div class="avatar-thumbnail">
+
+            <img class="img-circle group-avatar-large" src="{{ url_for('static',filename=group.medium_avatar) }}" alt="{{ group.name }}" >
+
+        </div>
+
+        <div class="group-content">
+            <span class="group-name">{{ group.name }}</span>
+            {% if group.about or user.location %}
+                <p style="color: #666">
+                    {% if group.about %}{{ group.about }}{% endif %}
+                    {% if group.location %}
+                     地址: {{ group.location }}
+                    {% endif %}
+                </p>
+            {% endif %}
+
+
+
+            {% if current_user.can(group,Permission.MODERATE_USER) %}
+                <a href="{{ url_for('.group_members',id=group.id) }}">
+                {{ group.members_count }}位成员
+                </a>
+                &nbsp;
+                <a href="{{ url_for('.group_verify_pendings',id=group.id) }}">
+                       新申请<span class="badge">{{ group.get_verify_pendings_count() }}</span>
+                </a>
+            {% endif %}
+
+
+            {% if current_user.is_authenticated and current_user.is_join_group(group) %}
+            {% set current_user_is_join_group=True %}
+            {% endif %}
+
+            <div style="margin-top: 10px; height: 35px;">
+
+                {% if not current_user_is_join_group %}
+                <div style="float: left; margin-right: 10px">
+                    {% if group.verify_mode==0 %}
+                        <button type="button" class="btn btn-primary btn-sm" onclick="join_group('{{ url_for('.join_group',id=group.id) }}')">加入</button>
+                    {% else %}
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">加入</button>
+                    {% endif %}
+                 </div>
+                {% endif %}
+
+                {% if current_user_is_join_group or current_user.can(group,Permission.MODERATE_GROUP) %}
+                <div class="dropdown" style="float: left;">
+                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                        操作<span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% if current_user.can(group,Permission.MODERATE_GROUP) %}
+                        <li><a href="{{ url_for('.edit_group_profile',id=group.id) }}">修改圈子信息</a></li>
+                        {% endif %}
+                        {% if current_user_is_join_group%}
+                            <li><a href="#">修改备注</a></li>
+                            <li><a href="{{ url_for('.quit_group',id=group.id) }}" >退出圈子</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+
+            </div>
+
+
+        </div><!--media-body end -->
+
+    </div><!--media end -->
+
+<div class="row">
+<div class="col-sm-8">
+    <!--发博文区域-->
+    {% if current_user.can(group,Permission.POST) %}
+    <div class="new-post-control-area" style="border-top:1px #eee solid; padding: 30px 0px 50px 0px; ">
+        <div class="new-post-control">
+            <div class="panel panel-default">
+                <form method="POST" role="form" action="{{ url_for('.new_post',group_id=group.id) }}" enctype="multipart/form-data"><!--onsubmit="return newPost.check_new_post()">-->
+                    {{ form.hidden_tag() }}
+                    <div class="panel-body" style="padding: 0px">
+                    {{ form.body(required="",class='form-control new-post-input',placeholder="有什么新鲜事分享一下吧") }}
+                    </div>
+
+
+
+                    <!--插入图片区域-->
+                    <div  class="panel-body" id="new-post-images-expand" style="display: none; border-top:1px #eee solid ">
+
+                        <div id="new-post-images-preview"><!--用来显示插入的图片--></div>
+                        <div id="new-post-images-file"><!--用来插入input file表单--></div>
+
+                        <!--利用CLICK事件同步上new-file-browser的Click-->
+                        <!--<a href="##" onclick="add_new_image()">+ 添加图片</a>-->
+                        <div id="new-post-add-image-btn" onclick="imageFiles.add_new_image()">+</div>
+
+                    </div>
+
+
+                    <!--插入投票区域-->
+                    <div  class="panel-body" id="new-post-poll-expand" style="display: none; border-top:1px #eee solid ">
+
+                        <div id="new-post-poll-options"><!--用于动态添加投票选项的html--></div>
+                        <a href="##" onclick="poll.add_new_poll_option()">+ 添加</a>
+                        <span>
+                            可选{{ form.poll_max_choice() }}项
+                        </span>
+                        <span>
+                            过{{ form.poll_expire_days() }}天后结束
+                        </span>
+                    </div>
+
+
+
+
+                    <!--Button-->
+                    <div class="panel-footer">
+                        <div class="pull-right">
+                        <input class='btn btn-default' type="submit" value="发布">
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default" aria-label="Left Align" onclick="newPost.click_images_expand()">
+                                <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" aria-label="Left Align" onclick="newPost.click_poll_expand()">
+                                <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div><!--panel-->
+            {{ macros.render_field_error(form.body) }}
+            {{ macros.render_field_error(form.poll_max_choice) }}
+            {{ macros.render_field_error(form.poll_expire_days) }}
+        </div>
+
+    </div><!--new-post-control-area end-->
+    {% endif %}
+
+
+
+    {% include '_posts.html' %}
+
+    {% if pagination and pagination.pages>1 %}
+    <div class="pagination">
+        {{ macros.pagination_widget(pagination, '.index') }}
+    </div>
+    {% endif %}
+
+    <!--modal-->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">验证信息</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{ group.verify_question }}</p>
+                    <input type="text" class="form-control" id="join-verify-answer" value="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="join_group('{{ url_for('.join_group',id=group.id) }}')">加入</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+</div><!--/left-->
+
+<div class="col-sm-4 page-right">
+    <div>
+        <div><h5>小区信息</h5></div>
+        <ul class="media-list">
+            <li class="media">
+                <a class="pull-left" href="{{ url_for('.user', username=current_user.username) }}">
+                    <img class="img-circle user-avatar-medium" src="{{ url_for('static',filename=current_user.medium_avatar) }}" alt="{{ current_user.username }}" >
+                </a>
+                <div class="media-body">
+                    <span>{{ current_user.username }}</span>
+                    <div>业委会委员</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</div><!--/right-->
+</div><!--/.row-->
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<!--
+{{ pagedown.include_pagedown() }}
+-->
+
+<script>
+    var newPost = new NewPost();
+    var poll = new Poll();
+    var imageFiles = new ImageFiles();
+</script>
+
+{% endblock %}
+

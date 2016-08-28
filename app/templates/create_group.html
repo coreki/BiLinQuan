@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}比邻圈 - 创建圈子{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>创建圈子</h1>
+</div>
+<div class="col-md-4">
+
+    <form method="POST" role="form">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.name.label }} {{ form.name(required='',class='form-control') }}
+        </div>
+        <div class="form-group">
+        {{ form.about.label }} {{ form.about(required='',class='form-control') }}
+        </div>
+        {{ form.province.label }}
+        <div class="form-group form-inline">
+            {{ form.province(class='form-control') }}
+            {{ form.city(class='form-control') }}
+            {{ form.district(class='form-control') }}
+        </div>
+        <div class="form-group">
+        {{ form.location.label }} {{ form.location(required='',class='form-control') }}
+        </div>
+
+            {{ form.submit(class='btn btn-default') }}
+
+    </form>
+</div>
+
+{% endblock %}
